@@ -2,6 +2,7 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     form_themes:
         - bootstrap_4_horizontal_layout.html.twig
+        - 'my_form_theme.html.twig' # Custom theme
 
 when@test:
     twig:
