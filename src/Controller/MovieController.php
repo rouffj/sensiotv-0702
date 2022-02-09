@@ -4,7 +4,6 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
-use App\OmdbApi;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,15 +12,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
+use App\OmdbApi;
 
 class MovieController extends AbstractController
 {
     private OmdbApi $omdbApi;
 
-    public function __construct()
+    public function __construct(OmdbApi $omdbApi)
     {
-        $httpClient = new CurlHttpClient(['verify_host' => false, 'verify_peer' => false]);
-        $this->omdbApi = new OmdbApi($httpClient, '28c5b7b1', 'https://www.omdbapi.com');
+        $this->omdbApi = $omdbApi;
+        // $httpClient = new CurlHttpClient(['verify_host' => false, 'verify_peer' => false]);
+        // $this->omdbApi = new OmdbApi($httpClient, '28c5b7b1', 'https://www.omdbapi.com');
     }
 
     /**

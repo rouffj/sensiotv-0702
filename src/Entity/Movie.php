@@ -5,56 +5,37 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity(repositoryClass: MovieRepository::class)]
+#[ORM\Table(name: '`movie`')]
 class Movie
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-    /**
-     * @ORM\Column(type="date")
-     */
+    #[ORM\Column(type: 'date')]
     private $releaseDate;
 
-    /**
-     * @ORM\Column(type="string", length=10, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 10, nullable: true, unique: true)]
     private $imdbId;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $poster;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $plot;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
+    #[ORM\Column(type: 'string', length: 10)]
     private $duration;
 
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private $rated;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[ORM\Column(type: 'float', nullable: true)]
     private $imdbRating;
 
     public function __construct()
@@ -167,18 +148,31 @@ class Movie
     {
         $movie = new self();
 
-        $movie
-            ->setTitle($movieInfo['Title'])
-            ->setImdbId($movieInfo['imdbID'])
-            ->setReleaseDate(new \DateTime($movieInfo['Released']))
-            ->setPoster($movieInfo['Poster'])
-            ->setPlot($movieInfo['Plot'])
-            ->setDuration($movieInfo['Runtime'])
+        if ('N/A' !== $movieInfo['Title']) {
+            $movie->setTitle($movieInfo['Title']);
+        }
+        if ('N/A' !== $movieInfo['imdbID']) {
+            $movie->setImdbId($movieInfo['imdbID']);
+        }
+        if ('N/A' !== $movieInfo['Released']) {
+            $movie->setReleaseDate(new \DateTime($movieInfo['Released']));
+        }
+        if ('N/A' !== $movieInfo['Poster']) {
+            $movie->setPoster($movieInfo['Poster']);
+        }
+        if ('N/A' !== $movieInfo['Plot']) {
+            $movie->setPlot($movieInfo['Plot']);
+        }
+        if ('N/A' !== $movieInfo['Runtime']) {
+            $movie->setDuration($movieInfo['Runtime']);
+        }
+        if ('N/A' !== $movieInfo['imdbRating']) {
+            $movie->setImdbRating($movieInfo['imdbRating']);
+        }
+        if ('N/A' !== $movieInfo['Rated']) {
+            $movie->setRated($movieInfo['Rated']);
+        }
 
-            ->setImdbRating($movieInfo['imdbRating'])
-            ->setRated($movieInfo['Rated'])
-        ;
-            
         return $movie;
     }
 }
