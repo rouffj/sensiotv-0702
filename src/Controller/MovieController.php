@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use App\OmdbApi;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class MovieController extends AbstractController
 {
@@ -52,6 +53,8 @@ class MovieController extends AbstractController
      */
     public function import($imdbId, EntityManagerInterface $manager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $movieData = $this->omdbApi->requestOneById($imdbId);
 
         $movie = Movie::fromApi($movieData);
@@ -70,6 +73,8 @@ class MovieController extends AbstractController
         $movies = $this->omdbApi->requestAllBySearch($keyword);
         dump($this->omdbApi, $movies);
 
+        //return [$user1, $user2, $user3];
+
         return $this->render('movie/search.html.twig', [
             'movies' => $movies,
             'keyword' => $keyword,
@@ -82,6 +87,9 @@ class MovieController extends AbstractController
     public function show(int $id, MovieRepository $movieRepository): Response
     {
         $movie = $movieRepository->findOneById($id);
+        if (!$this->isGranted('MOVIE_SHOW', $movie)) {
+            throw new AccessDeniedException('You are not allowed to see the movie ' . $movie->getTitle());
+        }
 
         return $this->render('movie/show.html.twig', [
             'id' => $id,

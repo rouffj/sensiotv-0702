@@ -43,9 +43,14 @@
     </li>
 </ul>
 <ul class="navbar-nav text-center">
-                <li class="nav-item active"><a class="nav-link" href="/register" title="Register or log in"><i class="fas fa-plus-square"></i></a></li>
+    {% if app.user %}
+        <span style="color: #fff">Bonjour {{ app.user.firstName }} | 
+            <a class="text-light" href="{{ path('app_logout') }}" title="Register or log in"><i class="fas fa-solid fa-door-closed"></i></a>
+        </span>
+    {% else %}
+        <li class="nav-item active"><a class="nav-link" href="/register" title="Register or log in"><i class="fas fa-plus-square"></i></a></li>
         <li class="nav-item active"><a class="nav-link" href="/login" title="Register or log in"><i class="fas fa-user"></i></a></li>
-    
+    {% endif %}
 </ul>
 
 

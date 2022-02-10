@@ -36,6 +36,12 @@ services:
             $omdbHost: 'https://www.omdbapi.com'
             $composerLicence: '%env(key:license:json:file:resolve:COMPOSER_PATH)%'
 
+    App\EventListener\MovieImportedListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'postPersist', entity: 'App\Entity\Movie' }
+            - { name: 'doctrine.orm.entity_listener', event: 'postUpdate', entity: 'App\Entity\Movie' }
+
+
     # App\OmdbApi:
     #     arguments:
     #         $omdbClient: '@Symfony\Contracts\HttpClient\HttpClientInterface'
